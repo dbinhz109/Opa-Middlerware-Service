@@ -1,0 +1,9 @@
+database:
+  postgresql:
+    connection-string: ""
+
+security:
+  auth:
+    jwt:
+      alg: HS256
+      base64-secret: OU9MV3hORDRvODNqNEs0aXVvcE85T0xXeE5ENG84M2o0SzRpdW9wTw==

@@ -1,0 +1,1008 @@
+definitions:
+  dto.AccountDto:
+    properties:
+      account_id:
+        type: integer
+      account_type:
+        type: integer
+      display_name:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      lancs_id:
+        type: string
+      phone_number:
+        type: string
+      photo_url:
+        type: string
+      user_name:
+        type: string
+    type: object
+  dto.ApiResponse:
+    properties:
+      data:
+        description: Additional data if any
+      error:
+        type: integer
+      error_code:
+        description: Application specific error code
+        type: integer
+      message:
+        description: Message is the error message that may be displayed to end users
+        type: string
+      total_count:
+        description: For responses with amount semantic
+        type: integer
+    type: object
+  dto.AttachEdgeReq:
+    properties:
+      edge_id:
+        type: string
+      site_id:
+        type: string
+    type: object
+  dto.PasswordLoginReq:
+    properties:
+      captcha:
+        type: string
+      challenge:
+        $ref: '#/definitions/dto.TimedChallenge'
+      login:
+        type: string
+      password:
+        type: string
+      remember_me:
+        type: boolean
+      root_account:
+        type: boolean
+    type: object
+  dto.PasswordLoginResp:
+    properties:
+      access_token:
+        type: string
+      challenge:
+        $ref: '#/definitions/dto.TimedChallenge'
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/dto.AccountDto'
+    type: object
+  dto.TimedChallenge:
+    properties:
+      key:
+        type: string
+      signature:
+        type: string
+      status:
+        type: integer
+      timeout:
+        type: integer
+      timestamp:
+        type: integer
+      value:
+        type: string
+    type: object
+  dto.UserProfileDto:
+    properties:
+      account_type:
+        type: integer
+      address:
+        type: string
+      admin_id:
+        type: integer
+      department:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: integer
+      organization:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  model.App:
+    properties:
+      category_id:
+        type: integer
+      id:
+        type: integer
+      index_name:
+        type: string
+      name:
+        type: string
+    type: object
+  model.AppList:
+    properties:
+      account_id:
+        type: integer
+      id:
+        type: integer
+      lancsid:
+        type: string
+      name:
+        type: string
+    type: object
+  model.AppListItem:
+    properties:
+      account_id:
+        type: integer
+      app_id:
+        type: integer
+      app_list_id:
+        type: integer
+      app_name:
+        type: string
+      id:
+        type: integer
+      lancsid:
+        type: string
+    type: object
+  model.EndUser:
+    properties:
+      active:
+        type: integer
+      address:
+        type: string
+      admin_id:
+        type: integer
+      birthday:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      edge_id:
+        type: integer
+      email:
+        type: string
+      fullname:
+        type: string
+      group_id:
+        type: integer
+      id:
+        type: integer
+      lancsid:
+        type: string
+      local_user_id:
+        type: integer
+      modified_at:
+        type: string
+      password:
+        type: string
+      phone:
+        type: integer
+      role:
+        type: integer
+      user_name:
+        type: string
+    type: object
+  model.Site:
+    properties:
+      account_id:
+        type: integer
+      description:
+        type: string
+      edge_id:
+        type: string
+      edge_type:
+        type: string
+      id:
+        type: string
+      lancsid:
+        type: string
+      name:
+        type: string
+      site_number:
+        type: integer
+      system_ip:
+        type: string
+    type: object
+  model.SlaClass:
+    properties:
+      account_id:
+        type: integer
+      id:
+        type: integer
+      jitter:
+        type: number
+      lancsid:
+        type: string
+      latency:
+        type: number
+      loss:
+        type: number
+      name:
+        type: string
+    type: object
+  model.SlaPolicy:
+    properties:
+      account_id:
+        type: integer
+      app_list_id:
+        type: integer
+      id:
+        type: integer
+      lancsid:
+        type: string
+      sla_class_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/dto.PasswordLoginReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PasswordLoginResp'
+              type: object
+      summary: Login using username or email
+  /auth/login-finish:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/dto.PasswordLoginReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PasswordLoginResp'
+              type: object
+      summary: Begin login flow with otp required
+  /auth/login-initiate:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/dto.PasswordLoginReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PasswordLoginResp'
+              type: object
+      summary: Begin login flow with otp required
+  /create:
+    post:
+      responses: {}
+      summary: create Web entity
+  /delete:
+    post:
+      responses: {}
+  /get/:id:
+    get:
+      responses: {}
+      summary: get Web entity
+  /linksafe-pub/profile/register-account:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserProfileDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserProfileDto'
+              type: object
+      summary: Register new Home or Enterprise account
+  /linksafe/analytics/active-agents/:id:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: get active agents of current account
+  /linksafe/analytics/agent-events/:id:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: get security events of all agents of current account
+  /linksafe/analytics/agent-stats/:id:
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: get stats on single agent
+  /linksafe/app/find-all:
+    get:
+      responses: {}
+  /linksafe/edges/get-all-by-accountType:
+    get:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/endDevice/delete/:id:
+    post:
+      responses: {}
+      summary: delete EndDevice entity
+  /linksafe/endDevice/delete/:mac:
+    post:
+      responses: {}
+      summary: delete EndDevice entity
+  /linksafe/endDevice/get-all/:userId:
+    get:
+      responses: {}
+      summary: GetAll EndDevice entity
+  /linksafe/endDevice/get-one/:id:
+    get:
+      responses: {}
+      summary: GetOne EndDevice entity
+  /linksafe/group/:id:
+    post:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/group/get-all:
+    get:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/group/get-one/:id:
+    get:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/group/update:
+    post:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/policy/:scenarioId:
+    get:
+      responses: {}
+      summary: get Policy entity
+  /linksafe/policy/delete/:id:
+    post:
+      responses: {}
+      summary: get Policy entity
+  /linksafe/policy/update/:id:
+    post:
+      responses: {}
+      summary: get Policy entity
+  /linksafe/profile/me:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserProfileDto'
+              type: object
+      summary: Get currently authenticated user profile
+  /linksafe/profile/update-me:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserProfileDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserProfileDto'
+              type: object
+      summary: Register new Home or Enterprise account
+  /linksafe/protocol/find-all:
+    get:
+      responses: {}
+  /linksafe/scenario/delete/:id:
+    post:
+      responses: {}
+      summary: get Scenario entity
+  /linksafe/scenario/get-all:
+    get:
+      responses: {}
+      summary: get Scenario entity
+  /linksafe/scenario/update/:id:
+    post:
+      responses: {}
+      summary: get GroupEndUser entity
+  /linksafe/sdwan/app-list-item/create:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppListItem'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.AppListItem'
+                  type: array
+              type: object
+  /linksafe/sdwan/app-list-item/delete:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppListItem'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+  /linksafe/sdwan/app-list-item/list:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppListItem'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.AppListItem'
+                  type: array
+              type: object
+  /linksafe/sdwan/app-list/update:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppList'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.AppList'
+              type: object
+      summary: Update a single AppList entity
+  /linksafe/sdwan/app/list:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.App'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.App'
+                  type: array
+              type: object
+  /linksafe/sdwan/applist/create:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.AppList'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.AppList'
+              type: object
+  /linksafe/sdwan/applist/delete:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppList'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+  /linksafe/sdwan/applist/get/:id:
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.AppList'
+              type: object
+  /linksafe/sdwan/applist/list:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.AppList'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.AppList'
+                  type: array
+              type: object
+  /linksafe/sdwan/sites/attach-edge:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dto.AttachEdgeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Site'
+              type: object
+      summary: Attach an edge to a SDWAN site
+  /linksafe/sdwan/sites/create:
+    post:
+      description: Site create
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.Site'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Site'
+                  type: array
+              type: object
+      summary: create Site entity
+  /linksafe/sdwan/sites/delete:
+    post:
+      description: Site get
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.Site'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: Update a sdwan site
+  /linksafe/sdwan/sites/detach-edge:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dto.AttachEdgeReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Site'
+              type: object
+      summary: Detach an edge from a SDWAN site
+  /linksafe/sdwan/sites/get/:id:
+    get:
+      description: Site get
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Site'
+                  type: array
+              type: object
+      summary: get Site entity
+  /linksafe/sdwan/sites/list:
+    get:
+      description: Site get
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Site'
+                  type: array
+              type: object
+      summary: Find sdwan sites
+    post:
+      description: Site get
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/model.Site'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Site'
+                  type: array
+              type: object
+      summary: Find sdwan sites
+  /linksafe/sdwan/sites/update:
+    post:
+      description: Site get
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.Site'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Site'
+              type: object
+      summary: Update a sdwan site
+  /linksafe/sdwan/sla-policy/create:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaPolicy'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaPolicy'
+              type: object
+      summary: create SlaPolicy entity
+  /linksafe/sdwan/sla-policy/delete:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaPolicy'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: Delete a single SlaPolicy entity
+  /linksafe/sdwan/sla-policy/get/:id:
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaPolicy'
+              type: object
+      summary: get SlaPolicy entity
+  /linksafe/sdwan/sla-policy/list:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaPolicy'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaPolicy'
+              type: object
+      summary: get SlaPolicy entity list
+  /linksafe/sdwan/sla-policy/update/:id:
+    post:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaPolicy'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaPolicy'
+              type: object
+      summary: Update a single SlaPolicy entity
+  /linksafe/sdwan/sla/create:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaClass'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaClass'
+              type: object
+      summary: create SlaClass entity
+  /linksafe/sdwan/sla/delete:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaClass'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ApiResponse'
+      summary: Delete a single SlaClass entity
+  /linksafe/sdwan/sla/get/:id:
+    get:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaClass'
+              type: object
+      summary: get SlaClass entity
+  /linksafe/sdwan/sla/list:
+    post:
+      parameters:
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaClass'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.SlaClass'
+                  type: array
+              type: object
+      summary: get SlaClass entity list
+  /linksafe/sdwan/sla/update/:id:
+    post:
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: string
+      - description: Request param
+        in: body
+        name: param
+        schema:
+          $ref: '#/definitions/model.SlaClass'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SlaClass'
+              type: object
+      summary: Update a single SlaClass entity
+  /linksafe/user/create:
+    post:
+      responses: {}
+      summary: create EndUser entity
+  /linksafe/user/delete/:id:
+    post:
+      responses: {}
+      summary: delete EndUser entity
+  /linksafe/user/get-all:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.EndUser'
+                  type: array
+              type: object
+      summary: get EndUser entity
+  /linksafe/user/get-one/:id:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.ApiResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.EndUser'
+              type: object
+      summary: GetOne EndUser entity
+  /linksafe/user/update:
+    post:
+      responses: {}
+      summary: get EndUser entity
+  /linksafe/web/find-all:
+    get:
+      responses: {}
+  /list:
+    post:
+      responses: {}
+swagger: "2.0"

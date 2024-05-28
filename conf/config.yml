@@ -1,0 +1,55 @@
+application:
+  name: go-app
+configuration:
+  profiles:
+    - dev
+server:
+  port: 9999
+  host:
+  publicAddress:
+  publicPort:
+security:
+  auth:
+    jwt:
+      # only supports HS256,HS384,HS512,ES256,ES384,ES512
+      alg: ES256
+      
+      # used by ES* algorithms only for verifying signature
+      public-key: |
+        -----BEGIN PUBLIC KEY-----
+        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYhtQs9R5iVmITAbjXrJt/e0YqkEk
+        BTzmbeCpPh77UXjlHFOLz3ctq9+WelesSlFJJzy3QooGl/obXe3gcq4hYg==
+        -----END PUBLIC KEY-----
+      # used by HS* algorithms for signing and verifying signature
+      base64-secret: ODA2NDNjNjQ0NDhmMTYyMGVhNzI5YjI0ZTBmZWRjNWY3M2JkM2I1MzA2Njc4NTY0MDhjZTE2ODU1YTc1MGYyZmU2ZDE1ZjRkOTBkMjliY2QxYTBiMGQ2ODAzOWI1MjQ4YWM3Mzc1NmM1ZmJjNjMzNjlmY2M3MGQ5MjFjYWQxYmU=
+database:
+  redis:
+    host: 192.168.1.131
+    port: 6379
+    password:
+    db: 0
+
+services:
+  consul:
+    server: 192.168.1.131:8500
+    user:
+    password:
+    config_key: lsmanagement/config
+  wazuh:
+    esUser: elastic
+    esPassword: ""
+    wazuhUser: lancs-wui
+    wazuhPassword: ""
+    baseUrl: https://192.168.1.33:55000
+    indexer: https://192.168.1.33:9200
+  management:
+    baseUrl: http://127.0.0.1:8866
+  analysis:
+    baseUrl: http://192.168.1.93:5005
+  eslogdata:
+    addresses:
+      - https://192.168.1.5:9200
+    user: elastic
+    password: hlgz9JOWCXbdWE2Uijrg
+opa:
+  policy_path: "example.rego"
